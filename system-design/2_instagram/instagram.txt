@@ -1,0 +1,116 @@
+FUNCTIONAL REQUIREMENTS:
+1. follow/unfollow people
+2. generate feed
+3. like a post 
+4. create a post
+
+OUT OF SCOPE:
+1. stories
+2. comments (replies)
+3. tagging
+4. reels
+5. messaging
+
+NON FUNCTIONAL REQUIREMENTS:
+1. latency (p95 < 500ms)
+2. availibility (99.9% uptime)
+3. durability (posts should not be dropped)
+4. consistency (eventual consistency acceptable for likes, follower counts, and feed freshness.)
+
+SCALE ESTIMATION:
+DAU: 100M
+Assume 10% post a post everyday
+Writes: 10M/day = 10M/86400 = 100 QPS 
+Reads: 100M DAU * 20 opens/day = 2B feed req/day ~ 20000 qps
+Peak Read: 20k qps * 5  = 100k qps
+Storage: 10M * 5MB = 50TB/day (object storage)
+
+
+HIGH LEVEL DESIGN:
+SERVICES:
+1. Social Graph service 
+    POST /follow/{user_id}
+    POST /unfollow/{user_id}
+2. Post service
+    POST /posts
+3. Feed service
+    GET /feed
+4. Engagement Service
+    POST /like/{post_id}/{user_id}
+
+DATA MODEL:
+Entities:
+    1. Users:
+        user_id
+        user_name
+    2. Posts:
+        post_id
+        post_user_id
+        post_metadata
+        post_created_at
+        media_url (from the object storage)
+    3. Follows:
+        followee_id
+        follower_id
+    4. Likes:
+        user_id
+        post_id
+
+Database Selection:
+Object storage like S3 for images.
+Users: RDB
+Posts: Cassandra (we are not going to perform complex queries but need a scalable, highly available, and fault tolerant data base for posts)
+Follows: Cassandra (consider a celebrity onboarding, need to scale that)
+Likes: Cassandra (a post going really really viral will bring in insane write throughput)
+
+
+THE CORE PROBLEM: Fanning out of posts from the accounts user follows
+Two approaches:
+1. Fanout on read
+    fetch account >  fetch posts > merge > return feed
+    Handles celebrity accounts better
+    slower feed generation compared to fanout on write (feed computation at read time)
+    expensive reads due to fetching recent posts from many followed accounts and merging at request time
+2. Fanout on write
+    push post reference to feed of all followers
+    fast reads
+    Not a great option for celebrity accounts
+    
+We move with a hybrid approach:
+Fanout on read for celebrity posts + Fanout on write for non celebrity posts.
+
+Celebrity Account: account with follower count > threshold
+Celebrity threshold: Celebrity defined as follower count > 1M, flagged in users table, updated by a background job."
+
+Fanout on write Flow: 
+1. User uploads a post
+    post is stored in posts DB
+    media is stored in blob storage
+2. Post creation event emmitted to queue
+    postid + created_time + user_id
+3. Fanout worker consume the event
+4. fetch user followers
+5. worker writes post ref into followers feed store
+6. feed service reads precomputed feed (stored in cassandra --> massive write throughput, cheap compared to redis)
+
+Feed store schema:
+   partition key: user_id
+   clustering key: created_at DESC (stored newest-first on disk)
+   TTL: 7 days
+
+Fanout on read flow:
+1. fetch for normal users from cassandra
+2. fetch for celebrities from posts db
+3. merge both stream
+4. sort
+
+Scaling:
+Write scaling: Feed timeline store uses Cassandra because writes can be partitioned by user_id, allowing horizontal scaling as traffic grows.
+CDN: Media content is served via CDN to reduce origin load and improve latency globally.
+
+Trade Offs:
+Consistency vs Availibility:
+We prefer availability over strict consistency for feed freshness and likes, so eventual consistency is acceptable.
+Cost vs Latency:
+CDN will serve frequently fetched posts, but will increase consts.
+
