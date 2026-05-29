@@ -1,0 +1,65 @@
+FUNCTIONAL REQUIREMENTS:
+1. send sms/email/in-app notifications
+2. template based
+3. preferance based
+
+NON FUNCTIONAL REQUIREMENTS:
+1. Latency (1-2 secs)
+2. Idempotency (a notification is sent only once)
+3. Durability (do not lose notifications)
+4. Availibility (notifications are critical)
+
+SCALE:
+DAU: 10M
+Total: 10M * 5 times * 3 channels = 150M notifications per day
+QPS: 150M / 86400 = 1500 QPS 
+Peak QPS: 10000 QPS (Peak factor of around 5+)
+
+DATA MODEL:
+Entities:
+    Preferences (MongoDB):
+    {
+        "user_id": 123,
+        "sms": true,
+        "in_app": true,
+        "email: false
+    }
+
+    Templates (MongDB):
+    {
+        "content": "",
+        "name": "",
+        "channel: "EMAIL"
+    }
+
+    Processed DB (Cassandra, as really big write throughput needed):
+        notification_id
+        channel
+        status
+        processed_at
+
+
+
+CORE PROBLEM:
+Given a notification event, determine the user's channel preferences,
+render the appropriate templates, and reliably deliver notifications
+across multiple channels at scale.
+Notification service acts as the orchestrator and based on preferences sends notifications.  
+
+Failures are retried using exponential backoff.
+After N retries the message is sent to a DLQ.
+
+SCALING:
+Redis Cache: 
+user_id:prferences 
+1 WEEK + cache invalidation on preference change.
+Notification service can scale behind a load balancer.
+Each worker is handles seperate responsibility and can be scaled independently. 
+
+
+TRADE OFFS:
+1. Latency vs Cost:   
+We introduced caching which will increase cost
+2. Consistency vs Availability:
+Users may receive notifications a few seconds later,
+but the system remains highly available.
