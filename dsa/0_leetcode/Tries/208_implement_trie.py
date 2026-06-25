@@ -6,7 +6,6 @@ class Node:
 class Trie:
     def __init__(self):
         self.root = Node()
-        print(self.root)
 
     def insert(self, word: str) -> None:
         check = self.root
