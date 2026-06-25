@@ -8,7 +8,6 @@ class Solution:
         # do we include it or do we skip it
         
         def backtrack(i):
-            print(i, subset)
             if i >= len(nums):
                 res.append(subset.copy())
                 return 
