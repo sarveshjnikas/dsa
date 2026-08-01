@@ -9,7 +9,7 @@ class Solution:
             for j in range(n-1,-1,-1):
                 if i == m-1 and j == n-1:
                     continue
-                print(dungeon[i][j])
+                
                 # where can i go from (i,j) --> (i+1, j) or (i,j+1)
                 hp1 = health[i][j+1] if j+1 < n else float('inf') # health needed at i,j+1
                 hp2 = health[i+1][j] if i+1 < m else float('inf') # health needed at i+1, j
