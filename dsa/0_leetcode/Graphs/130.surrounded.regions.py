@@ -2,9 +2,6 @@ from typing import List
 from collections import deque
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
         m,n = len(board), len(board[0])
         q = deque()
         visited = set()
