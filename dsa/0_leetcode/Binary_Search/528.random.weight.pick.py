@@ -12,9 +12,18 @@ class Solution:
             self.probs.append((p, i))
             
     def pickIndex(self) -> int:
-        r = random.random()
-        # NEED BINARY SEARCH HERE... BUT I AM TIRED BOSS
-        for ele in self.probs:
-            if r < ele[0]:
-                return ele[1]
+        R = random.random()        
+        l = 0
+        r = len(self.probs)-1
+        while l <= r:
+            mid = l + (r-l)//2
+            below = 0 if mid ==0 else self.probs[mid-1][0]
+            if below <= R  <= self.probs[mid][0]:
+                return self.probs[mid][1]
+            
+            if R > self.probs[mid][0]:
+                l = mid + 1
+            else:
+                r = mid -1
+            
         return 0
