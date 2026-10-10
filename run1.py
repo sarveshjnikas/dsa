@@ -276,3 +276,38 @@ class Solution:
             self.ans[s] = x
             return x
         return dfs(s)
+   
+#############################################################
+ 
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        ans = {}
+        def dfs(s):
+            if s in ans:
+                return ans[s]
+
+            if s[0] == "0":
+                ans[s] = 0
+                return 0
+
+            if len(s) == 1:
+                ans[s] = 1
+                return 1
+
+            if len(s) == 2:
+                if int(s) % 10 == 0:
+                    t =  1 if int(s) in (10,20) else 0
+                    ans[s] = t
+                    return t
+
+                t = 2 if 11<= int(s) <= 26 else 1
+                ans[s] = t
+                return t
+
+            
+            a = dfs(s[1:]) if int(s[0]) != 0 else 0
+            b = dfs(s[2:]) if int(s[:2]) <= 26 else 0
+            ans[s] = a + b
+            return a + b
+
+        return dfs(s)
