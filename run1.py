@@ -143,3 +143,60 @@ class Solution:
                 l = m + 1
         return l
 
+
+#############################################################
+
+
+class Solution:
+    def isValid(self, s: str) -> bool:
+        opp = {")": "(", "]": "[", "}": "{"}
+        stack = []
+        for c in s:
+            if c in ("(", "[", "{"):
+                stack.append(c)
+            else:
+                if not stack or stack.pop() != opp[c]: # if not stack is true --> return false right away so code will enter or only if stack is there. also stack.pop() removes and then checks. 
+                    return False
+        return not stack
+    
+#############################################################
+
+class Solution:
+    def dailyTemperatures(self, temperatures: list[int]) -> list[int]:
+        # BRUTE FORCE IS SIMPLY ITERATE TWICE IN O(N^2)
+
+        stack = [] # INDICES OF THE UNRESOLVED TEMPERATURES
+        warmer = [0] * len(temperatures)
+        # FOR EACH TEMPERATURE WHICH PREVIOUS INDICES DOES THIS TEMPERATURE RESOLVE?
+        for i in range(len(temperatures)):
+            curr = temperatures[i]
+            while stack and curr > temperatures[stack[-1]]:
+                j = stack.pop()
+                warmer[j] = i - j
+            stack.append(i)
+        return warmer
+
+#############################################################
+
+class Solution:
+    def asteroidCollision(self, asteroids: list[int]) -> list[int]:
+        alive = True
+        stack = []
+        for i in range(len(asteroids)):
+            alive = True
+            a = asteroids[i]
+            
+            while alive and a < 0 and stack and stack[-1] > 0:
+                if stack[-1] < -a:  # TOP IS DESTROYED
+                    stack.pop()
+                elif stack[-1] == -a:  # BOTH ARE DESTROYED
+                    stack.pop()
+                    alive = False
+                else:  # A IS DESTROYED
+                    alive = False
+        
+            if alive:
+                stack.append(a)
+        return stack
+    
+#############################################################
