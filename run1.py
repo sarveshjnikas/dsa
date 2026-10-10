@@ -1,6 +1,8 @@
 # MOST QUESTIONS IN THIS RUN ARE ALREADY SOLVED ONCE. THIS IS REVISION RUN. 
 
 ############################################################# 
+# TWO POINTERS AND HASHMAPS
+############################################################# 
 
 class Solution:
     def maxArea(self, height: list[int]) -> int:
@@ -63,6 +65,9 @@ class Solution:
             anagrams.append(d[key])
         return anagrams
     
+
+#############################################################
+# BINARY SEARCH
 #############################################################
 
 class Solution:
@@ -144,6 +149,9 @@ class Solution:
         return l
 
 
+
+#############################################################
+# STACKS
 #############################################################
 
 
@@ -198,5 +206,41 @@ class Solution:
             if alive:
                 stack.append(a)
         return stack
+
+
+#############################################################
+# LINKED LIST
+#############################################################
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+        
+class Solution:
+    def reverseList(self, head: ListNode | None) -> ListNode | None:
+        prev = None # DRAW INITAL AND FINAL LISTS AND THIS STEP BECOMES OBVIOUS. 
+        while head:
+            temp = head.next
+            head.next = prev
+            prev = head
+            head = temp
+        return prev
+    
     
 #############################################################
+# DYNAMIC PROGRAMMING
+#############################################################
+
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        if len(nums) <=2:
+            return max(nums)
+
+        coins = [0]*len(nums) # AT i, BEST POSSIBLE MONEY i ONWARDs
+        coins[-1] = nums[-1]
+        coins[-2] = max(nums[-1], nums[-2])
+        for i in range(len(nums)-3, -1, -1):
+            coins[i] = max(nums[i]+ coins[i+2], coins[i+1])
+        return coins[0]
+        

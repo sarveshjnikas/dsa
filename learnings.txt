@@ -1,3 +1,13 @@
+
+#############################################################
+BASICS:
+#############################################################
+Prefix: elements before the current index.
+Suffix: elements after the current index.
+Prefix sum: sum of all elements before the current index.
+Prefix product: product of all elements before the current index.
+Suffix sum/product: sum/product of all elements after the current index.
+
 #############################################################
 BINARY SEARCH:
 #############################################################
@@ -24,3 +34,4 @@ return l
 #############################################################
 STACKS
 #############################################################
+
