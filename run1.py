@@ -243,4 +243,36 @@ class Solution:
         for i in range(len(nums)-3, -1, -1):
             coins[i] = max(nums[i]+ coins[i+2], coins[i+1])
         return coins[0]
-        
+    
+#############################################################
+
+class Solution:
+    def coinChange(self, coins: list[int], amount: int) -> int:
+        dp = [float('inf')]*(amount+1) # ith ENTRY, LEAST NUMBER OF COINS NEEDED TO MAKE AMOUNT i
+        dp[0] = 0
+
+        for amt in range(1, amount+1):
+            for coin in coins:
+                a = dp[amt-coin] + 1 if amt -coin >= 0 else float("inf")
+                dp[amt] = min(dp[amt], a)
+        return dp[amount] if dp[amount] != float('inf') else -1
+
+#############################################################
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
+        self.ans = {}
+        def dfs(s):
+            if s in wordDict:
+                return True
+
+            if s in self.ans:
+                return self.ans[s]
+
+            x = False
+            for word in wordDict:
+                if s.startswith(word):
+                    x = x or dfs(s[len(word):])
+            self.ans[s] = x
+            return x
+        return dfs(s)
