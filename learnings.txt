@@ -1,0 +1,26 @@
+#############################################################
+BINARY SEARCH:
+#############################################################
+
+Pattern 1: find an exact target
+
+l, r = 0, n - 1
+while l <= r:
+    m = (l + r) // 2
+    if a[m] == target: return m
+    elif a[m] < target: l = m + 1
+    else: r = m - 1
+return -1
+
+Pattern 2: find the smallest value that works
+
+l, r = lo, hi                  # lo = lowest possible answer, hi = a value that surely works
+while l <= r:
+    m = (l + r) // 2
+    if feasible(m): r = m - 1
+    else:           l = m + 1
+return l
+
+#############################################################
+STACKS
+#############################################################

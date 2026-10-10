@@ -92,5 +92,54 @@ class Solution:
         return -1
     
 #############################################################
-
     
+class Solution:
+    def minEatingSpeed(self, piles: list[int], h: int) -> int:
+        # [4,11,20,23,30] 
+        def feasible(m):
+            t = 0
+            for pile in piles:
+                t +=  (pile + m - 1) // m
+            return t <= h
+        piles = sorted(piles)
+        # BRUTE FORCE: FOR EACH VALUE IN 1-MAX(PILES) FIND HOURS NEEDED FOR EACH VALUE TO EAT ALL BANANAS. O(KN)
+        l = 1
+        r = piles[-1]
+        # BINARY SEARCH, WHILE MAKING SURE THAT WE END UP ON THE SMALLEST VALUE
+        while l <= r:
+            m = (l + r ) // 2
+            if feasible(m):
+                r = m - 1
+            else:
+                l = m + 1
+
+        return l
+    
+#############################################################
+ 
+class Solution:
+    def shipWithinDays(self, weights: list[int], days: int) -> int:
+        def feasible(m):
+            s = 0
+            t = 1
+            for weight in weights:
+                if s + weight > m:
+                    t  += 1
+                    s = weight
+                else:
+                    s = s + weight
+            return t <= days
+
+        # LEAST WEIGHT CAP
+        t = sum(weights)
+        l = max(weights)
+        r = t
+    
+        while l <= r:
+            m = (l + r) // 2
+            if feasible(m): # ABLE TO SHIP
+                r = m - 1
+            else:
+                l = m + 1
+        return l
+
