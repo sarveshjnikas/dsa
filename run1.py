@@ -65,7 +65,6 @@ class Solution:
             anagrams.append(d[key])
         return anagrams
     
-
 #############################################################
 # BINARY SEARCH
 #############################################################
@@ -148,12 +147,9 @@ class Solution:
                 l = m + 1
         return l
 
-
-
 #############################################################
 # STACKS
 #############################################################
-
 
 class Solution:
     def isValid(self, s: str) -> bool:
@@ -207,7 +203,6 @@ class Solution:
                 stack.append(a)
         return stack
 
-
 #############################################################
 # LINKED LIST
 #############################################################
@@ -226,7 +221,6 @@ class Solution:
             prev = head
             head = temp
         return prev
-    
     
 #############################################################
 # DYNAMIC PROGRAMMING
@@ -311,3 +305,51 @@ class Solution:
             return a + b
 
         return dfs(s)
+
+#############################################################
+# BACKTRACKING
+#############################################################
+
+class Solution:
+    def subsets(self, nums: list[int]) -> list[list[int]]:
+        res = []
+        subset = []
+
+        def dfs(i):
+            if i == len(nums):      # BASE CASE
+                res.append(subset.copy())
+                return
+            subset.append(nums[i])  # MAKE THE CHOICE
+            dfs(i+1)                # EXPLORE
+            subset.pop()            # UNDO
+            dfs(i+1)                # EXPLORE WITHOUT THE CHOICE
+
+        dfs(0)
+        return res
+
+
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        res = []
+        subset = []
+        def dfs(t, i):              # i IS NEEDED TO HANDLE DUPLICATES IN RES
+            print(t)
+            if t < 0:
+                return
+            if t == 0:              # BASE CASE
+                res.append(subset.copy())
+                return
+
+            for j in range(i, len(candidates)):
+                cd = candidates[j]
+                subset.append(cd)   # MAKE THE CHOICE
+                dfs(t- cd, j)       # EXPLORE. WITH ONLY CANDIDATES AT AND AFTER j
+                subset.pop()        # UNDO THE CHOICE
+
+        dfs(target, 0)
+        return res
+    
+# candidates = [2, 3, 5], target = 5.
+# - After choosing 2, you can choose 2, 3, or 5.
+# - After choosing 3, you can choose 3 or 5 — not 2 anymore. ALL BH*** BH**** BEFORE THAT IS ALREADY HANDLE IN 2 CASE
+# - After choosing 5, you can choose only 5.

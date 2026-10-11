@@ -32,6 +32,39 @@ while l <= r:
 return l
 
 #############################################################
-STACKS
+STACKS AND QUEUES
+#############################################################
+stack = []
+stack.append(x)  # push
+stack.pop()      # pop top
+stack[-1]        # peek top
+not stack        # empty?
+
+
+from collections import deque
+
+q = deque()
+q.append(x)      # enqueue
+q.popleft()      # dequeue
+q[0]             # front
+
+
+#############################################################
+DYNAMIC PROGRAMMING
 #############################################################
 
+HOW DO I DEFINE MY STATE AND WHICH SMALLER STATES CAN PRODUCE ITS ANSWER?
+
+
+#############################################################
+BACKTRACKING
+#############################################################
+
+AM I BUILDING THE SOLUTION STEP BY STEP AND
+DO CHOICE I MAKE NOW AFFECT WHAT CHOICES REMAIN?
+
+HANDLE THE BASE CASES
+FOR EACH POSSIBLE CHOICE:
+    MAKE THE CHOICE
+    EXPLORE
+    UNDO THE CHOICE (HERE UNDO IF FAILS OF ENDS, WE MIGHT WANNA KEEP EXPLORING)
