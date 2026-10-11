@@ -327,6 +327,7 @@ class Solution:
         dfs(0)
         return res
 
+#############################################################
 
 class Solution:
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
@@ -353,3 +354,36 @@ class Solution:
 # - After choosing 2, you can choose 2, 3, or 5.
 # - After choosing 3, you can choose 3 or 5 — not 2 anymore. ALL BH*** BH**** BEFORE THAT IS ALREADY HANDLE IN 2 CASE
 # - After choosing 5, you can choose only 5.
+
+#############################################################
+
+class Solution:
+    def exist(self, board: list[list[str]], word: str) -> bool:
+        m, n = len(board), len(board[0])
+        
+        def dfs(pos, w, path):
+            r, c = pos[0], pos[1]
+            
+            if board[r][c] != w[0]:
+                return False
+            
+            if len(w) == 1:
+                return True
+
+            directions = [[1,0], [-1,0], [0,1], [0,-1]]
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < m and 0 <= nc < n and (nr, nc) not in path:
+                    path.add((nr, nc))
+                    if dfs((nr, nc), w[1:], path):
+                        return True
+                    path.remove((nr, nc))
+                    
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0]:
+                    if dfs((i, j), word, path={(i, j)}):
+                        return True
+        return False
+
+#############################################################
