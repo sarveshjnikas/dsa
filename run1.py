@@ -4,6 +4,9 @@
 # TWO POINTERS AND HASHMAPS
 ############################################################# 
 
+from typing import List
+
+
 class Solution:
     def maxArea(self, height: list[int]) -> int:
         area = float("-inf")
@@ -387,3 +390,26 @@ class Solution:
         return False
 
 #############################################################
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        m, n = len(grid), len(grid[0])
+        seen = set()
+
+        def dfs(pos):
+            r, c = pos[0], pos[1]
+            directions = [(0,1),(0,-1),(1,0),(-1,0)]
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < m and 0<= nc < n and (nr,nc) not in seen and  grid[nr][nc] == "1" :
+                    seen.add((nr, nc))
+                    dfs((nr, nc))
+
+        ct = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "1" and (i,j) not in seen:
+                    ct +=1
+                    seen.add((i,j))
+                    dfs((i,j))
+        return ct
