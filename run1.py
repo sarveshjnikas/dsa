@@ -77,6 +77,18 @@ class Solution:
             if target - nums[i] in d:
                 return [i, d[target - nums[i]]]
             d[nums[i]] = i
+            
+#############################################################
+          
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        # ASK AT i WHAT THE THE SUBARRAY WITH THE LARGET SUM ENDING AT i
+        curr = best = nums[0]
+        for i in range(1, len(nums)):
+            curr = max(curr + nums[i], nums[i])
+            best = max(curr, best)
+        return best
+        
 #############################################################
 # SLIDING WINDOW
 #############################################################
