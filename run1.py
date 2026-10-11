@@ -67,7 +67,28 @@ class Solution:
         for key in d:
             anagrams.append(d[key])
         return anagrams
-    
+ 
+#############################################################
+# SLIDING WINDOW
+#############################################################
+ 
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        seen = set()
+        l = 0
+        t = 0
+        for r in range(len(s)):
+            if s[r] not in seen:
+                seen.add(s[r])
+                t = max(t, r-l+1)
+            else:
+                # MOVE LEFT SO THAT seen no longer has s[r]
+                while s[l] != s[r]:
+                    seen.remove(s[l])
+                    l += 1
+                l = l + 1 
+        return t
+   
 #############################################################
 # BINARY SEARCH
 #############################################################
@@ -413,3 +434,6 @@ class Solution:
                     seen.add((i,j))
                     dfs((i,j))
         return ct
+    
+    
+acd1R1
