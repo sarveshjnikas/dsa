@@ -1,7 +1,7 @@
 # MOST QUESTIONS IN THIS RUN ARE ALREADY SOLVED ONCE. THIS IS REVISION RUN. 
 
 ############################################################# 
-# TWO POINTERS AND HASHMAPS
+# TWO POINTERS AND HASHMAPS AND BASICS
 ############################################################# 
 
 from typing import List
@@ -68,6 +68,15 @@ class Solution:
             anagrams.append(d[key])
         return anagrams
  
+#############################################################
+
+class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        d = {}
+        for i in range(len(nums)):
+            if target - nums[i] in d:
+                return [i, d[target - nums[i]]]
+            d[nums[i]] = i
 #############################################################
 # SLIDING WINDOW
 #############################################################
@@ -434,6 +443,3 @@ class Solution:
                     seen.add((i,j))
                     dfs((i,j))
         return ct
-    
-    
-acd1R1
