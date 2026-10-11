@@ -455,3 +455,27 @@ class Solution:
                     seen.add((i,j))
                     dfs((i,j))
         return ct
+    
+#############################################################
+# TREE
+#############################################################
+
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        diameter = 0
+        def dfs(node): # RETURN MAXIMUM LEFT SUBTREE LENGHT AND RIGHT SUBTREE LENGTH
+            nonlocal diameter
+            if not node:
+                return -1
+
+            # HOW FAR CAN I GO THROUGH THE LEFT SUBTREE 
+            left = dfs(node.left)
+            right = dfs(node.right)
+            
+            diameter = max(diameter, left+right+2)
+
+            return 1 + max(left, right)
+            
+        dfs(root)
+        return diameter
+        
