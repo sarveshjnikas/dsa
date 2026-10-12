@@ -607,3 +607,33 @@ class Solution:
         return both
     
 #############################################################
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        d = {i: [] for i in range(numCourses)} # WHICH COURSES ARE DEPENDENT OF A COURSE
+        p = {i: set() for i in range(numCourses)} 
+        for pr in prerequisites:
+            ai, bi = pr
+            d[bi].append(ai)
+            p[ai].add(bi)
+
+        dq = deque()
+        seen = set()
+        for course in p:
+            if not p[course]:
+                dq.append(course)
+                seen.add(course)
+
+        # HERE dq STORES ALL COURSES THAT HAVE NO PREREQ
+        while dq:
+            c = dq.popleft()
+            for dp in d[c]: # ALL COURSES WHERE THAT COURSE WAS NEEDED
+                p[dp].remove(c)
+                if not p[dp] and dp not in seen:
+                    dq.append(dp)
+                    seen.add(dp)
+                    
+        for j in p:
+            if p[j]:
+                return False
+        return True
