@@ -6,7 +6,6 @@
 
 from typing import List
 
-
 class Solution:
     def maxArea(self, height: list[int]) -> int:
         area = float("-inf")
@@ -352,6 +351,25 @@ class Solution:
         return dfs(s)
 
 #############################################################
+
+class Solution:
+    def canPartition(self, nums: list[int]) -> bool:
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+        
+        half = total // 2
+        possible = [0]*(int(half)+1)
+        possible[0] = 1
+
+        for i in range(len(nums)):
+            for j in range(len(possible)-1, -1, -1):
+                if possible[j] == 1 and j+ nums[i] < len(possible):
+                    possible[j + nums[i]] = 1
+
+        return possible[-1] == 1
+
+#############################################################
 # BACKTRACKING
 #############################################################
 
@@ -502,3 +520,43 @@ class Solution:
 
         dfs(root, 0)
         return list(ans.values())
+    
+#############################################################
+# GRAPHS
+#############################################################
+
+from collections import deque
+class Solution:
+    def orangesRotting(self, grid: list[list[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        seen = set() # ADD TO SEEN WHILE ENQUEUEING THE NODE
+        q = deque()
+        fresh = 0
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 2:
+                    q.append((i,j))
+                    seen.add((i,j))
+                elif grid[i][j] == 1:
+                    fresh += 1
+
+        directions = [(0,1), (0,-1), (1,0),(-1,0)]
+        minutes = 0
+        while q and fresh:
+            for _ in range(len(q)): 
+                # ONE CAN DO WITHOUT THIS, BUT THIS TRICK IS TO SKIP TRACKING LEVELS
+                # THIS IS LIKE ADD FIRST BFS LEVEL PROCESS IT COMPLETELY. THEN PROCESS NEXT. 
+                r,c = q.popleft()
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+
+                    if 0 <= nr < m and 0 <= nc < n and (nr, nc) not in seen and grid[nr][nc] == 1:
+                        fresh -= 1
+                        grid[nr][nc] = 2
+                        q.append((nr,nc))
+                        seen.add((nr,nc))
+
+            minutes += 1
+        return minutes if fresh == 0 else -1
+
