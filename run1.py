@@ -560,3 +560,50 @@ class Solution:
             minutes += 1
         return minutes if fresh == 0 else -1
 
+#############################################################
+
+class Solution:
+    def pacificAtlantic(self, heights: list[list[int]]) -> list[list[int]]:
+        m,n  = len(heights), len(heights[0])
+
+        A = [[0]*n for _ in range(m)]
+        P = [[0]*n for _ in range(m)]
+
+        A[-1]= [1]*n
+        P[0] = [1]*n
+
+        for i in range(m):
+            P[i][0] = 1
+            A[i][-1] = 1
+
+        p_seen = set()
+        a_seen = set()
+
+        directions = [(0,1),(0,-1),(1,0),(-1,0)]
+
+        def dfs(node, M, seen):
+            r, c = node
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < m and 0 <= nc < n and heights[nr][nc] >= heights[r][c] and (nr, nc) not in seen:
+                    M[nr][nc] = 1
+                    seen.add((nr, nc))
+                    dfs((nr,nc), M, seen)
+                    
+        for i in range(m):
+            for j in range(n):
+                if P[i][j] == 1:
+                    p_seen.add((i,j))
+                    dfs((i,j), P, p_seen)
+
+                if A[i][j] == 1:
+                    a_seen.add((i,j))
+                    dfs((i,j), A, a_seen)        
+        both = []
+        for i in range(m):
+            for j in range(n):
+                if A[i][j] == 1 and P[i][j] == 1:
+                    both.append([i,j])
+        return both
+    
+#############################################################
