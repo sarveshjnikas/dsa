@@ -610,7 +610,7 @@ class Solution:
 
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
-        d = {i: [] for i in range(numCourses)} # WHICH COURSES ARE DEPENDENT OF A COURSE
+        d = {i: [] for i in range(numCourses)} # STORES WHICH COURSES ARE DEPENDENT OF A COURSE
         p = {i: set() for i in range(numCourses)} 
         for pr in prerequisites:
             ai, bi = pr
@@ -637,3 +637,26 @@ class Solution:
             if p[j]:
                 return False
         return True
+
+#############################################################
+
+from collections import deque
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        n  = len(isConnected)
+        seen = set()
+        provinces = 0
+        for i in range(n):
+            if i in seen:
+                continue
+            provinces +=1
+            q = deque([i])
+            while q:
+                node = q.popleft()
+                for j in range(n):
+                    if isConnected[node][j] == 1 and j not in seen:
+                        q.append(j)
+                        seen.add(j)        
+        return provinces 
+    
+#############################################################
