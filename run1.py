@@ -572,7 +572,28 @@ class Solution:
                     heapq.heappush(heap, nums[i])
         return heap[0]
     
-     
+    # ABOVE IS THE GENERAL PATTERN FOR K LARGEST. WE KEEP ONLY TOP K ELEMENTS WITH MIN HEAP. 
+
+#############################################################
+import heapq
+class Solution:
+    def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
+        heap = []
+        heapq.heapify(heap)
+        for point in points:
+            x, y = point
+            dist = (x**2 + y**2) ** 0.5
+            if len(heap) < k:
+                heapq.heappush(heap, [-dist, point])
+            else:
+                if -dist > heap[0][0]:
+                    heapq.heappop(heap)
+                    heapq.heappush(heap, [-dist, point])
+                    
+        return [pt for d, pt in heap]
+    # ABOVE IS THE GENERAL PATTERN FOR K SMALLEST. WE KEEP ONLY SMALLEST K ELEMENTS WITH MIN HEAP AND NEGATIVE TRICK.
+    
+        
 #############################################################
 # GRAPHS
 #############################################################
