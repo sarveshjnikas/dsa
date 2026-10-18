@@ -531,6 +531,28 @@ class Solution:
 
         return dfs(root,float('inf'),float('-inf'))
 
+#############################################################
+class Solution:
+    def lcaDeepestLeaves(self, root: TreeNode | None) -> TreeNode | None:
+        def dfs(node):
+            if not node:
+                return (0, None)
+
+            ld, l_lca = dfs(node.left) # DEPTH OF DEEPEST LEFT NODES, ANSWER
+            rd, r_lca = dfs(node.right) # DEPTH OF DEEPEST RIGHT NODES, ANSWER
+
+            # AT THE NODE HOW DEEP IS EACH LEFT AND RIGHT SUBTREE?
+            # IF EQUAL --> CURRENT NODE IS THE THE ANSWER
+            # IF LEFT/RIGHT IF DEEPER ANSWER IS THE DFS(NODE)
+            
+            if ld == rd:
+                return (ld + 1, node)
+            elif (ld > rd):
+                return (ld + 1, l_lca)
+            else:
+                return (rd + 1, r_lca)
+
+        return dfs(root)[1]
            
 #############################################################
 # GRAPHS
