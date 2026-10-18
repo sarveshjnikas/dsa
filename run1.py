@@ -532,6 +532,7 @@ class Solution:
         return dfs(root,float('inf'),float('-inf'))
 
 #############################################################
+
 class Solution:
     def lcaDeepestLeaves(self, root: TreeNode | None) -> TreeNode | None:
         def dfs(node):
@@ -553,7 +554,25 @@ class Solution:
                 return (rd + 1, r_lca)
 
         return dfs(root)[1]
-           
+    
+#############################################################
+# HEAPS
+#############################################################
+import heapq
+class Solution:
+    def findKthLargest(self, nums: list[int], k: int) -> int:
+        heap = [] # O(N)
+        heapq.heapify(heap)
+        for i in range(len(nums)): # O(N)
+            if len(heap) < k:
+                heapq.heappush(heap, nums[i])
+            else:
+                if nums[i] > heap[0]:
+                    heapq.heappop(heap) # O(logK)
+                    heapq.heappush(heap, nums[i])
+        return heap[0]
+    
+     
 #############################################################
 # GRAPHS
 #############################################################

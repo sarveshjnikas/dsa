@@ -80,3 +80,27 @@ DIAMETER : MAXIMUM DISTANCE BETWEEN ANY TWO NODES. THIS PATH MIGHT NOT NECESSARI
 
 BINARY SEARCH TREES : VALUES IN THE LEFT SUBTREE ARE SMALLER THAN NODE'S VALUE AND RIGHT SUBTREE AND LARGER.
 EACH SUBTREE ALSO MUST FOLLOW SAME PATTERN
+
+
+HEAPS:
+SPECIAL KIND OF BINARY TREE BUILT WHEN YOU NEED SMALLEST OR LARGEST ELEMENT FREQUENTLY
+MIN HEAP: PARENT <= CHILDREN,  ROOT IS THE SMALLEST ELEMENT
+MAX HEAP: PARENT >= CHILDREN,  ROOT IS THE LARGEST ELEMENT
+
+PYTHON:
+
+import heapq
+
+heap = []
+heapq.heappush(heap, 5)    # Insert 5
+heapq.heappush(heap, 2)    # Insert 2
+heapq.heappush(heap, 8)    # Insert 8
+print(heap[0])             # 2: minimum element
+x = heapq.heappop(heap)    # Remove and return minimum
+print(x)                   # 2
+
+Operation	    Python	            Complexity
+Insert	        heappush(heap, x)	O(log n)
+Get minimum	    heap[0]	            O(1)
+Remove minimum	heappop(heap)	    O(log n)
+Build heap	    heapify(nums)	    O(n)
