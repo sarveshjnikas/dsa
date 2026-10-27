@@ -87,6 +87,54 @@ class Solution:
             curr = max(curr + nums[i], nums[i])
             best = max(curr, best)
         return best
+ 
+#############################################################
+# APPROACH 1: O(N) TIME AND SPACE
+class Solution:
+    def trap(self, height: list[int]) -> int:
+        n = len(height)
+        # MAX HEIGHT LEFT TO THE BAR AND RIGHT TO THE BAR
+        left = [0]*n
+        right = [0]*n
+
+        for i in range(1, n):
+            left[i] = max(left[i-1], height[i-1])
+
+        for j in range(n-2, -1, -1):
+            right[j] = max(right[j+1], height[j+1])
+        
+        water = 0 
+        for i in range(n):
+            water += max(0, min(left[i], right[i])-height[i])
+        return water  
+     
+# APPROACH 2: O(N) TIME AND O(1) SPACE
+class Solution:
+    def trap(self, height: list[int]) -> int:
+        n = len(height)
+        l = 0
+        r = n - 1
+        left_max = 0
+        right_max = 0
+        # AT ANY POINT, WHAT ARE WE LOOKING FOR? TALLEST WALL ON THE RIGHT AND ON THE LEFT
+        # FOR THE LEFT POINTER I CAN NOT ANSWER WHAT IS THE TALLEST WALL ON THE RIGHT
+        # FOR THE RIGHT POINTER I CAN NOT ANSWER WHAT IS THE TALLEST WALL ON THE LEFT
+        water = 0
+        while l <= r:
+            # IF THE LEFT MAXIMUM IS < RIGHT MAXIMUM
+            if left_max < right_max:
+                # WE CAN BE CERTAIN ABOUT THAT IT IS LEFT MAXIMUM WALL LIMITING THE LEFT POINTER
+                # CALCULATE WATER AT LEFT
+                water += max(0, left_max-height[l])
+                left_max = max(left_max, height[l])
+                l += 1 
+            else:
+            # WE CAN BE CERTAIN ABOUT THAT IT IS RIGHT MAXIMUM WALL LIMITING THE RIGHT POINTER
+                # CALCULATE WATER AT 
+                water += max(0, right_max-height[r])
+                right_max = max(right_max, height[r])
+                r -= 1 
+        return water            
         
 #############################################################
 # SLIDING WINDOW
@@ -732,4 +780,9 @@ class Solution:
                         seen.add(j)        
         return provinces 
     
+#############################################################
+
+
+#############################################################
+# TRIES
 #############################################################
