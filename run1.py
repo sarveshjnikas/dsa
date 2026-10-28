@@ -786,3 +786,27 @@ class Solution:
 #############################################################
 # TRIES
 #############################################################
+
+
+
+
+
+#############################################################
+# PREFIX SUM
+#############################################################
+
+# PREFIX_SUM[i] INCLUDES THE ELEMENT AT i
+# pre[i] - pre[j] = SUM OF SUBARRAY ENDING AT i AND BEGIN AT j+
+
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        seen = {0:1}
+        out = 0
+        cur = 0
+        
+        for num in nums:
+            cur = cur + num                     # CURRENT PREFIX SUM
+            out = out + seen.get(cur-k, 0) 
+            seen[cur] = seen.get(cur, 0) + 1    # .GET IS SUITS BETTER FOR COUNTS AND FOR ARRAY ETC:
+                                                # .setdefault("x", []).append(2) IF x not in DICT SET IT [] AND THEN APPEND 2 ELSE JUST APPEND 2. 
+        return out
