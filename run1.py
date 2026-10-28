@@ -156,7 +156,29 @@ class Solution:
                     l += 1
                 l = l + 1 
         return t
-   
+    
+#############################################################
+
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        # SLIDING WINDOW:
+        # INCREMENT RIGHT POINTER TILL THE WINDOW IS VALID
+        # ONCE INVALID, MOVE THE LEFT POINT ENOUGH TO MAKE IT VALID
+        # KEEP UPDATING THE THING YOU ARE LOOKING FOR
+        seen = {}
+        l = 0
+        f_max = 0
+        out = 0
+        for r in range(len(s)):
+            seen[s[r]] = seen.get(s[r], 0) + 1    
+            f_max = max(f_max, seen[s[r]]) # MAXIMUM FREQ OF ANY CHARACTER
+            le = r - l + 1 # LENGTH OF THE WINDOW
+            if le - f_max <= k: # THE WINDOW IS VALID
+                out = max(out, le)
+            else: # THE WINDOW IS INVALID
+                seen[s[l]] -= 1
+                l += 1
+        return out
 #############################################################
 # BINARY SEARCH
 #############################################################
@@ -788,9 +810,6 @@ class Solution:
 #############################################################
 
 
-
-
-
 #############################################################
 # PREFIX SUM
 #############################################################
@@ -807,6 +826,6 @@ class Solution:
         for num in nums:
             cur = cur + num                     # CURRENT PREFIX SUM
             out = out + seen.get(cur-k, 0) 
-            seen[cur] = seen.get(cur, 0) + 1    # .GET IS SUITS BETTER FOR COUNTS AND FOR ARRAY ETC:
+            seen[cur] = seen.get(cur, 0) + 1    # .GET SUITS BETTER FOR COUNTS AND FOR ARRAY ETC:
                                                 # .setdefault("x", []).append(2) IF x not in DICT SET IT [] AND THEN APPEND 2 ELSE JUST APPEND 2. 
         return out
