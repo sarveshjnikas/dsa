@@ -803,6 +803,44 @@ class Solution:
         return provinces 
     
 #############################################################
+class Solution:
+    def accountsMerge(self, accounts: list[list[str]]) -> list[list[str]]:
+        graph = {}
+        eton = {}
+        for account in accounts:
+            name = account[0]
+            first = account[1] # THE STAR THAT WILL ACT AS THE CONNECTING BRIDGE
+            eton[first] = name
+            graph.setdefault(first, set())
+            for email in account[2:]:
+                graph[first].add(email)
+                graph.setdefault(email, set()).add(first) # THESE TWO TOGETHER ADD AN UNDIRECTED EDGE 
+                eton[email] = name
+
+        visited = set()
+        out = []
+        for node in list(graph):
+            if node in visited:
+                continue
+            
+            acc = [eton[node], node]    # NEW ACCOUNT. START A TRAVERSAL FROM THIS NODE
+            q = deque([node])
+            visited.add(node)
+
+            while q:                    # COLLECT ALL THE EMAILS FOR THAT ACCOUNT
+                e = q.popleft()
+                for nei in graph[e]:
+                    if nei not in visited:
+                        visited.add(nei)
+                        q.append(nei)
+                        acc.append(nei)
+            out.append(acc)
+
+        sorted_accounts = []
+        for account in out:
+            emails = sorted(account[1:])
+            sorted_accounts.append([account[0]] + emails)
+        return sorted_accounts
 
 
 #############################################################
