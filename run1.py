@@ -440,6 +440,30 @@ class Solution:
         return possible[-1] == 1
 
 #############################################################
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        seen = {}
+        def dfs(i,j):
+            if (i,j) in seen:
+                return seen[(i,j)]
+
+            # BASE CASE:
+            if i >= len(text1) or j >= len(text2):
+                seen[(i,j)] = 0
+                return 0
+
+            # FIRST CHARACTER MATCHES
+            if text1[i] == text2[j]:
+                c =  1 + dfs(i+1, j+1)
+                seen[(i,j)] = c
+                return c
+            else:
+                c = max(dfs(i+1,j),dfs(i,j+1))
+                seen[(i,j)] = c
+                return c
+        return dfs(0,0)
+        
+#############################################################
 # BACKTRACKING
 #############################################################
 
