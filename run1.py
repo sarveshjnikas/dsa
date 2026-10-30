@@ -160,6 +160,21 @@ class Solution:
 #############################################################
 
 class Solution:
+    def findLengthOfLCIS(self, nums: list[int]) -> int:
+        left = 0
+        prev = float('-inf')
+        out = 0
+        for right in range(len(nums)):
+            curr = nums[right]
+            if curr > prev:
+                out = max(out, right-left+1)
+            else:
+                left = right
+            prev = curr  
+        return out
+#############################################################
+
+class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
         # SLIDING WINDOW:
         # INCREMENT RIGHT POINTER TILL THE WINDOW IS VALID
