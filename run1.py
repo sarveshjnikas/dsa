@@ -522,10 +522,10 @@ class Solution:
         dfs(target, 0)
         return res
     
-# candidates = [2, 3, 5], target = 5.
-# - After choosing 2, you can choose 2, 3, or 5.
-# - After choosing 3, you can choose 3 or 5 — not 2 anymore. ALL BH*** BH**** BEFORE THAT IS ALREADY HANDLE IN 2 CASE
-# - After choosing 5, you can choose only 5.
+    # candidates = [2, 3, 5], target = 5.
+    # - After choosing 2, you can choose 2, 3, or 5.
+    # - After choosing 3, you can choose 3 or 5 — not 2 anymore. ALL BH*** BH**** BEFORE THAT IS ALREADY HANDLE IN 2 CASE
+    # - After choosing 5, you can choose only 5.
 
 #############################################################
 
@@ -582,6 +582,27 @@ class Solution:
                     seen.add((i,j))
                     dfs((i,j))
         return ct
+#############################################################
+
+class Solution:
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        seen = {}
+
+        # WHAT SHOULD THIS RETURN?
+        # length of the longest increasing subsequence that STARTS at i
+        def dfs(i):
+            # CACHE READ 
+            if i in seen:
+                return seen[i]
+
+            # AT ANY POINT IF THE NEXT ELEMENT IS GREATER, ANSWER  =  1 + ANSWER @ NEXT
+            best = 1
+            for j in range(i+1, len(nums)):
+                if nums[j] > nums[i]:
+                    best = max(best, 1+dfs(j))
+            seen[i] = best
+            return best
+        return max(dfs(i) for i in range(len(nums)))
     
 #############################################################
 # TREES
@@ -906,3 +927,24 @@ class Solution:
             seen[cur] = seen.get(cur, 0) + 1    # .GET SUITS BETTER FOR COUNTS AND FOR ARRAY ETC:
                                                 # .setdefault("x", []).append(2) IF x not in DICT SET IT [] AND THEN APPEND 2 ELSE JUST APPEND 2. 
         return out
+    
+#############################################################
+# INTERVALS
+############################################################# 
+class Solution:
+    def carPooling(self, trips: list[list[int]], capacity: int) -> bool:
+        # HOW CAN WE FIND OUT HOW MANY PEOPLE WERE THERE INSIDE CAR AT EACH STEP?
+        # NET INFLOW OF PEOPLE AT EACH LOCATION:
+        delta = [0]*1001
+        for n, f, t in trips:
+            delta[f] += n # NUMBER OF PEOPLE WHO BOARDED
+            delta[t] -= n # NUMBER OF PEOPLE WHO GOT DOWN
+        
+        # PEOPLE AT EACH LOCATION:
+        total = 0
+        for i in delta:
+            total = total + i
+            if total > capacity:
+                return False
+        return True
+        
