@@ -479,6 +479,39 @@ class Solution:
         return dfs(0,0)
         
 #############################################################
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        seen = {}
+        # MIN EDITS NEEDED TO CONVERT WORD1[i:] to WORD1[j:]
+        def dfs(i,j):
+            if (i,j) in seen:
+                return seen[(i,j)]
+
+            if j >= len(word2):            # THERE IS NOTHING LEFT TO MATCH IN WORD 2
+                seen[(i,j)] = len(word1) - i
+                return len(word1) - i       # DELETE ALL THE LETTERS IN WORD 1
+            
+            if i >= len(word1):             # THERE IS NOTHING LEFT TO MATCH IN WORD 1
+                seen[(i,j)] = len(word2) - j
+                return len(word2) - j       # INSERT ALL THE LETTERS IN WORD 2
+
+            
+            if word1[i] == word2[j]:        # THE FIRST LETTER MATCHES
+                a = dfs(i+1, j+1)
+                seen[(i,j)] = a
+                return a
+            else:
+                a = 1 + dfs(i+1, j+1)       # CHANGE THE FIRST LETTER OF WORD 1 TO MATCH THE FIRST LETTER OF WORD 2
+                b = 1 + dfs(i+1, j)         # DELETE THE FIRST LETTER OF WORD 1
+                c = 1 + dfs(i, j+1)         # INSERT THE FIRST LETTER OF WORD 2 IN FRONT OF WORD 1
+                d =  min(a,b,c)
+                seen[(i,j)] = d
+                return d
+
+        out = dfs(0,0)
+        return out
+#############################################################
 # BACKTRACKING
 #############################################################
 
